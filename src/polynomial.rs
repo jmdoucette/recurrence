@@ -7,7 +7,7 @@ pub struct Polynomial {
 
 impl Polynomial {
     // creates a new polynomial from the given coefficients 
-    // starts with the coefficient of the biggest exponent
+    // starts with the coefficient of the smallest exponent
     pub fn new(coefficients: Vec<f64>) -> Polynomial {
         Polynomial {
             coefficients
