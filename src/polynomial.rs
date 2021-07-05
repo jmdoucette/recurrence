@@ -2,7 +2,7 @@ use std::fmt;
 use nalgebra::{DMatrix};
 
 pub struct Polynomial {
-    coefficients: Vec<f64>
+    coefficients: Vec<f64>,
 }
 
 impl Polynomial {
@@ -35,7 +35,7 @@ impl Polynomial {
         for (i, column) in eigs.column_iter().enumerate() {
         res.push(column[i]);
         }
-        
+
         res
     }
 }

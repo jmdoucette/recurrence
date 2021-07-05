@@ -1,5 +1,8 @@
 use crate::polynomial::Polynomial;
+use crate::solution_functions::SolutionFunction;
 use std::cmp::min;
+use nalgebra::{DMatrix, };
+
 
 pub struct RecurrenceRelation {
     base_cases: Vec<f64>,
@@ -30,7 +33,7 @@ impl RecurrenceRelation {
     /// returns the characteristic polynomial of the recurrence
     pub fn characteristic_polynomial(&self) -> Polynomial {
         let mut coefficients = Vec::new();
-        for coefficient in &self.recurrence {
+        for coefficient in self.recurrence.iter().rev() {
             coefficients.push(-1.0 * (*coefficient));
         }
         coefficients.push(1.0);
@@ -39,8 +42,17 @@ impl RecurrenceRelation {
     }
 
     /// returns the polynomial which is an explicit solution to the recurrence relation
-    pub fn solve(&self) -> Polynomial {
-        todo!();
+    pub fn solve(&self) -> SolutionFunction {
+        let roots = self.characteristic_polynomial().roots();
+        let matrix = DMatrix::from_row_slice(2, 2, &[
+            0.0, 1.0,
+            1.0, 1.0
+        ]);
+        let base_cases_vec = DMatrix::from_vec(1, self.degree(), self.base_cases);
+        let alphas = matrix.lu().solve(&base_cases_vec);
+
+        SolutionFunction::new(roots, alphas)
+
     }
 
     /// returns the first n terms of the recurrence relation
