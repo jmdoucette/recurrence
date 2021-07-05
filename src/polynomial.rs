@@ -60,10 +60,20 @@ impl SolutionFunction {
         if coefficients.len() != bases.len() {
             panic!("must have same length");
         }
-        
+
         SolutionFunction {
             coefficients,
             bases,
         }
+    }
+}
+
+impl fmt::Display for SolutionFunction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut res = String::new();
+        for (base, coefficient) in self.bases.iter().zip(self.coefficients.iter()) {
+            res.push_str(&format!("{} * {}^n ", coefficient, base));
+        }
+        write!(f, "{}", res)
     }
 }
