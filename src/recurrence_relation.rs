@@ -1,5 +1,4 @@
-use crate::polynomial::Polynomial;
-use crate::solution_functions::SolutionFunction;
+use crate::polynomial::{SolutionFunction, Polynomial};
 use std::cmp::min;
 use nalgebra::{DMatrix, };
 
@@ -48,9 +47,10 @@ impl RecurrenceRelation {
             0.0, 1.0,
             1.0, 1.0
         ]);
-        let base_cases_vec = DMatrix::from_vec(1, self.degree(), self.base_cases);
-        let alphas = matrix.lu().solve(&base_cases_vec);
-
+        let base_cases_vec = DMatrix::from_vec(self.degree(), 1, self.base_cases.clone());
+        let alphas_matrix = matrix.lu().solve(&base_cases_vec).expect("cant solve given linear system");
+        let alphas: Vec<f64> = alphas_matrix.iter().copied().collect();
+        println!("{:?}", alphas);
         SolutionFunction::new(roots, alphas)
 
     }

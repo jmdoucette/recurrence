@@ -12,5 +12,6 @@ fn main() {
     let coefficients = vec![6.0,-9.0];
 
     let r = RecurrenceRelation::new(base_cases, coefficients);
+    r.solve();
     println!("terms: {:?}, characteristic polynomial: {}", r.get_terms(10), r.characteristic_polynomial());
 }

@@ -49,3 +49,21 @@ impl fmt::Display for Polynomial {
         write!(f, "{}", res)
     }
 }
+
+pub struct SolutionFunction {
+    coefficients: Vec<f64>,
+    bases: Vec<f64>,
+}
+
+impl SolutionFunction {
+    pub fn new(coefficients: Vec<f64>, bases: Vec<f64>) -> SolutionFunction {
+        if coefficients.len() != bases.len() {
+            panic!("must have same length");
+        }
+        
+        SolutionFunction {
+            coefficients,
+            bases,
+        }
+    }
+}
