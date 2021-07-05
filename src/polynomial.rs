@@ -35,6 +35,7 @@ impl Polynomial {
         for (i, column) in eigs.column_iter().enumerate() {
         res.push(column[i]);
         }
+        
         res
     }
 }

@@ -8,9 +8,9 @@ pub struct RecurrenceRelation {
 
 impl RecurrenceRelation {
     /// creates a new recurrence relation with the specified recurrence and base cases
-    /// for example the fibonacci sequence which has recurrence f_n = f_{n-1} + f_{n-2} and base cases f_0 = 0 and f_1 = 1
+    /// for example the recurrence f_n = 3f_{n-1} + 5f_{n-2} and base cases f_0 = 0 and f_1 = 1
     /// base_cases = vec![0, 1]
-    /// recurrence = vec![1, 1]
+    /// recurrence = vec![3, 5]
     pub fn new(base_cases: Vec<f64>, recurrence: Vec<f64>) -> RecurrenceRelation {
         if base_cases.len() != recurrence.len() {
             panic!("base case and recurrence must be same size")
@@ -28,12 +28,13 @@ impl RecurrenceRelation {
     }
 
     /// returns the characteristic polynomial of the recurrence
-    fn characteristic_polynomial(&self) -> Polynomial {
-        let mut coefficients = vec![1.0];
+    pub fn characteristic_polynomial(&self) -> Polynomial {
+        let mut coefficients = Vec::new();
         for coefficient in &self.recurrence {
-            coefficients.push(*coefficient);
+            coefficients.push(-1.0 * (*coefficient));
         }
-        
+        coefficients.push(1.0);
+
         Polynomial::new(coefficients)
     }
 
@@ -51,11 +52,11 @@ impl RecurrenceRelation {
         }
 
         for i in self.degree()..n {
-            let mut term = 0.0;
-            for (base_case, coefficient) in self.base_cases.iter().zip(self.recurrence.iter()) {
-                term += base_case * coefficient;
+            let mut new_term = 0.0;
+            for (term, coefficient) in terms.iter().rev().zip(self.recurrence.iter()) {
+                new_term += term * coefficient;
             }
-            terms.push(term);
+            terms.push(new_term);
         }
 
         terms
