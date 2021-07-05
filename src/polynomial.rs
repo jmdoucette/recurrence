@@ -41,6 +41,10 @@ impl Polynomial {
 
 impl fmt::Display for Polynomial {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Polynomial todo")
+        let mut res = String::new();
+        for (pow, coefficient) in self.coefficients.iter().enumerate().rev() {
+            res.push_str(&format!("{}x^{} ", coefficient, pow));
+        }
+        write!(f, "{}", res)
     }
 }
