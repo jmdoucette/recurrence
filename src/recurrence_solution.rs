@@ -22,7 +22,7 @@ impl RecurrenceSolution {
         for (base, coefficient) in self.bases.iter().zip(self.coefficients.iter()) {
             res += coefficient * base.powf(n as f64);
         }
-        
+
         res
     }
 
@@ -34,7 +34,6 @@ impl RecurrenceSolution {
 
         res
     }
-
 }
 
 impl fmt::Display for RecurrenceSolution {
@@ -58,7 +57,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_terms () {
+    fn test_get_terms() {
         todo!();
     }
 }

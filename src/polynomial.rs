@@ -1,17 +1,15 @@
+use nalgebra::DMatrix;
 use std::fmt;
-use nalgebra::{DMatrix};
 
 pub struct Polynomial {
     coefficients: Vec<f64>,
 }
 
 impl Polynomial {
-    // creates a new polynomial from the given coefficients 
+    // creates a new polynomial from the given coefficients
     // starts with the coefficient of the smallest exponent
     pub fn new(coefficients: Vec<f64>) -> Polynomial {
-        Polynomial {
-            coefficients
-        }
+        Polynomial { coefficients }
     }
 
     pub fn degree(&self) -> usize {
@@ -20,10 +18,7 @@ impl Polynomial {
 
     // returns the companion matrix of the polynomial
     pub fn companion_matrix(&self) -> DMatrix<f64> {
-        return DMatrix::from_row_slice(2, 2, &[
-            0.0, 1.0,
-            1.0, 1.0
-        ]);
+        DMatrix::from_row_slice(2, 2, &[0.0, 1.0, 1.0, 1.0])
     }
 
     // returns a vector of the roots of a polynomial
@@ -33,7 +28,7 @@ impl Polynomial {
 
         let mut res = Vec::new();
         for (i, column) in eigs.column_iter().enumerate() {
-        res.push(column[i]);
+            res.push(column[i]);
         }
 
         res
@@ -63,6 +58,5 @@ mod tests {
     #[test]
     fn test_roots() {
         todo!();
-
     }
 }
