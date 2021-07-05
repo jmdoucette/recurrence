@@ -73,5 +73,25 @@ impl RecurrenceRelation {
 
         terms
     }
+}
 
+#[cfg(test)]
+mod tests {
+    //use super::*;
+    //use crate::test_utils::*;
+
+    #[test]
+    fn test_characteristic_polynomial() {
+        todo!();
+    }
+
+    #[test]
+    fn test_solve() {
+        todo!();
+    }
+
+    #[test]
+    fn test_get_terms() {
+        todo!();
+    }
 }

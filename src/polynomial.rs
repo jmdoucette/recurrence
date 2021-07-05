@@ -49,3 +49,20 @@ impl fmt::Display for Polynomial {
         write!(f, "{}", res)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    //use super::*;
+    //use crate::test_utils::*;
+
+    #[test]
+    fn test_companion_matrix() {
+        todo!();
+    }
+
+    #[test]
+    fn test_roots() {
+        todo!();
+
+    }
+}

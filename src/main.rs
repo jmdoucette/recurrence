@@ -5,6 +5,9 @@ mod recurrence_relation;
 use recurrence_relation::RecurrenceRelation;
 
 mod recurrence_solution;
+//use recurrence_solution::RecurrenceSolution;
+
+mod test_utils;
 
 fn main() {
     let p = Polynomial::new(vec![-1.0,-1.0,1.0]);

@@ -46,3 +46,19 @@ impl fmt::Display for RecurrenceSolution {
         write!(f, "{}", res)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    //use super::*;
+    //use crate::test_utils::*;
+
+    #[test]
+    fn test_evaluate() {
+        todo!();
+    }
+
+    #[test]
+    fn test_get_terms () {
+        todo!();
+    }
+}
