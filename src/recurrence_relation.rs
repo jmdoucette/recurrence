@@ -87,6 +87,7 @@ mod tests {
 
         let recurrence_relation2 = RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
         let characteristic_polynomial2 = Polynomial::new(vec![8.0, 12.0, 6.0]);
+        assert_eq!(recurrence_relation2.characteristic_polynomial(), characteristic_polynomial2);
     }
 
     #[test]
