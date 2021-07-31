@@ -35,7 +35,6 @@ impl RecurrenceRelation {
         for coefficient in self.recurrence_coefficients.iter().rev() {
             coefficients.push(-1.0 * (*coefficient));
         }
-        coefficients.push(1.0);
 
         Polynomial::new(coefficients)
     }
@@ -78,12 +77,16 @@ impl RecurrenceRelation {
 
 #[cfg(test)]
 mod tests {
-    //use super::*;
-    //use crate::test_utils::*;
+    use super::*;
 
     #[test]
     fn test_characteristic_polynomial() {
-        todo!();
+        let recurrence_relation1 = RecurrenceRelation::new(vec![0.0, 1.0], vec![1.0, 1.0]);
+        let characteristic_polynomial1 = Polynomial::new(vec![-1.0, -1.0]);
+        assert_eq!(recurrence_relation1.characteristic_polynomial(), characteristic_polynomial1);
+
+        let recurrence_relation2 = RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
+        let characteristic_polynomial2 = Polynomial::new(vec![8.0, 12.0, 6.0]);
     }
 
     #[test]
@@ -93,6 +96,12 @@ mod tests {
 
     #[test]
     fn test_get_terms() {
-        todo!();
+        let recurrence_relation1 = RecurrenceRelation::new(vec![0.0, 1.0], vec![1.0, 1.0]);
+        let terms1 = vec![0.0, 1.0, 1.0, 2.0, 3.0, 5.0, 8.0, 13.0, 21.0, 34.0];
+        assert_eq!(recurrence_relation1.get_terms(10), terms1);
+
+        let recurrence_relation2 = RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
+        let terms2 = vec![1.0, -2.0, 3.0, -2.0, -8.0, 48.0, -176.0, 544.0, -1536.0, 4096.0];
+        assert_eq!(recurrence_relation2.get_terms(10), terms2);
     }
 }

@@ -1,7 +1,8 @@
 use nalgebra::DMatrix;
 use std::fmt;
-use crate::utilities::within;
+use crate::utilities::*;
 
+#[derive(Debug, PartialEq)]
 pub struct Polynomial {
     coefficients: Vec<f64>,
 }
@@ -47,7 +48,6 @@ impl Polynomial {
         for (i, column) in schur.column_iter().enumerate() {
             let mut found = false;
             let new_eigenvalue = column[i];
-            println!("{}", new_eigenvalue);
             for (eigenvalue, count) in &mut eigenvalues {
                 if within(new_eigenvalue, *eigenvalue) {
                     *count += 1;
@@ -77,7 +77,6 @@ impl fmt::Display for Polynomial {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utilities::float_counts_equal;
 
     #[test]
     fn test_companion_matrix() {
