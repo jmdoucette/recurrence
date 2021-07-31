@@ -40,7 +40,7 @@ impl Polynomial {
     pub fn roots(&self) -> Vec<(f64, u32)> {
         let companion = self.companion_matrix();
         // look into increasing number of iterations
-        let schur = companion.schur().unpack().1;
+        let schur = companion.try_schur(0.000000000000000001, 0).unwrap().unpack().1;
 
         let mut eigenvalues = Vec::new();
         // todo: what to on fail?
@@ -113,10 +113,9 @@ mod tests {
         assert!(float_counts_equal(polynomial1.roots(), expected_roots1));
 
         let polynomial2 = Polynomial::new(vec![8.0, 12.0, 6.0]);
+        println!("{:?}", polynomial2.roots());
         let expected_roots2 = vec![(-2.0, 3)];
         assert!(float_counts_equal(polynomial2.roots(), expected_roots2));
-
-        //add test for polynomial 3
-
+        panic!();
     }
 }
