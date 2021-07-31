@@ -6,7 +6,7 @@ pub struct RecurrenceSolution {
 }
 
 impl RecurrenceSolution {
-    pub fn new(terms: Vec<(Polynomial, f64)) -> RecurrenceSolution {
+    pub fn new(terms: Vec<(Polynomial, f64)>) -> RecurrenceSolution {
         RecurrenceSolution {
             terms
         }
@@ -32,8 +32,8 @@ impl RecurrenceSolution {
 impl fmt::Display for RecurrenceSolution {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut res = String::new();
-        for (base, coefficient) in self.bases.iter().zip(self.coefficients.iter()) {
-            res.push_str(&format!("{} * {}^n ", coefficient, base));
+        for (polynomial, root) in &self.terms {
+            res.push_str(&format!("({}) * {}^n", polynomial, root));
         }
         write!(f, "{}", res)
     }
