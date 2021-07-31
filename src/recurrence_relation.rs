@@ -42,8 +42,9 @@ impl RecurrenceRelation {
     /// returns the polynomial which is an explicit solution to the recurrence relation
     pub fn solve(&self) -> RecurrenceSolution {
         let roots = self.characteristic_polynomial().roots();
+        todo!();
         // change later
-
+        /*
         let matrix =
             DMatrix::from_row_slice(2, 2, &[1.0, 1.0, 1.618033988749895, -0.6180339887498949]);
         let base_cases_vec = DMatrix::from_vec(self.degree(), 1, self.base_cases.clone());
@@ -53,6 +54,7 @@ impl RecurrenceRelation {
             .expect("cant solve given linear system");
         let alphas: Vec<f64> = alphas_matrix.iter().copied().collect();
         RecurrenceSolution::new(alphas, roots)
+        */
     }
 
     /// returns the first n terms of the recurrence relation

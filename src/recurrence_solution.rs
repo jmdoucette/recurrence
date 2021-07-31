@@ -1,21 +1,22 @@
 use std::fmt;
+use crate::polynomial::Polynomial;
 
 pub struct RecurrenceSolution {
-    coefficients: Vec<f64>,
-    bases: Vec<f64>,
+    terms: Vec<(Polynomial, f64)>
 }
 
 impl RecurrenceSolution {
-    pub fn new(coefficients: Vec<f64>, bases: Vec<(f64, u32)>) -> RecurrenceSolution {
-        todo!();
+    pub fn new(terms: Vec<(Polynomial, f64)) -> RecurrenceSolution {
+        RecurrenceSolution {
+            terms
+        }
     }
 
     pub fn evaluate(&self, n: u32) -> f64 {
         let mut res = 0.0;
-        for (base, coefficient) in self.bases.iter().zip(self.coefficients.iter()) {
-            res += coefficient * base.powf(n as f64);
+        for (polynomial, root) in &self.terms {
+            res += polynomial.evaluate(n) * root.powf(n as f64);
         }
-
         res
     }
 
@@ -24,7 +25,6 @@ impl RecurrenceSolution {
         for i in 0..n {
             res.push(self.evaluate(i));
         }
-
         res
     }
 }
@@ -43,11 +43,6 @@ impl fmt::Display for RecurrenceSolution {
 mod tests {
     //use super::*;
     //use crate::test_utils::*;
-
-    #[test]
-    fn test_evaluate() {
-        todo!();
-    }
 
     #[test]
     fn test_get_terms() {

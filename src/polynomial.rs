@@ -65,6 +65,10 @@ impl Polynomial {
         }
         eigenvalues
     }
+
+    pub fn evaluate(&self, n: u32) -> f64 {
+        todo!();
+    }
 }
 
 impl fmt::Display for Polynomial {
