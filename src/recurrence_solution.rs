@@ -6,15 +6,8 @@ pub struct RecurrenceSolution {
 }
 
 impl RecurrenceSolution {
-    pub fn new(coefficients: Vec<f64>, bases: Vec<f64>) -> RecurrenceSolution {
-        if coefficients.len() != bases.len() {
-            panic!("must have same length");
-        }
-
-        RecurrenceSolution {
-            coefficients,
-            bases,
-        }
+    pub fn new(coefficients: Vec<f64>, bases: Vec<(f64, u32)>) -> RecurrenceSolution {
+        todo!();
     }
 
     pub fn evaluate(&self, n: u32) -> f64 {

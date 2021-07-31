@@ -7,7 +7,7 @@ use recurrence_relation::RecurrenceRelation;
 mod recurrence_solution;
 //use recurrence_solution::RecurrenceSolution;
 
-mod test_utils;
+mod utilities;
 
 fn main() {
     println!("testing ci");

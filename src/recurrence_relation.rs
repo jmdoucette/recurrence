@@ -5,7 +5,7 @@ use std::cmp::min;
 
 pub struct RecurrenceRelation {
     base_cases: Vec<f64>,
-    recurrence: Vec<f64>,
+    recurrence_coefficients: Vec<f64>,
 }
 
 impl RecurrenceRelation {
@@ -13,14 +13,14 @@ impl RecurrenceRelation {
     /// for example the recurrence f_n = 3f_{n-1} + 5f_{n-2} and base cases f_0 = 0 and f_1 = 1
     /// base_cases = vec![0, 1]
     /// recurrence = vec![3, 5]
-    pub fn new(base_cases: Vec<f64>, recurrence: Vec<f64>) -> RecurrenceRelation {
-        if base_cases.len() != recurrence.len() {
+    pub fn new(base_cases: Vec<f64>, recurrence_coefficients: Vec<f64>) -> RecurrenceRelation {
+        if base_cases.len() != recurrence_coefficients.len() {
             panic!("base case and recurrence must be same size")
         }
 
         RecurrenceRelation {
             base_cases,
-            recurrence,
+            recurrence_coefficients,
         }
     }
 
@@ -32,7 +32,7 @@ impl RecurrenceRelation {
     /// returns the characteristic polynomial of the recurrence
     pub fn characteristic_polynomial(&self) -> Polynomial {
         let mut coefficients = Vec::new();
-        for coefficient in self.recurrence.iter().rev() {
+        for coefficient in self.recurrence_coefficients.iter().rev() {
             coefficients.push(-1.0 * (*coefficient));
         }
         coefficients.push(1.0);
@@ -43,6 +43,8 @@ impl RecurrenceRelation {
     /// returns the polynomial which is an explicit solution to the recurrence relation
     pub fn solve(&self) -> RecurrenceSolution {
         let roots = self.characteristic_polynomial().roots();
+        // change later
+
         let matrix =
             DMatrix::from_row_slice(2, 2, &[1.0, 1.0, 1.618033988749895, -0.6180339887498949]);
         let base_cases_vec = DMatrix::from_vec(self.degree(), 1, self.base_cases.clone());
@@ -64,7 +66,7 @@ impl RecurrenceRelation {
 
         for _ in self.degree()..n {
             let mut new_term = 0.0;
-            for (term, coefficient) in terms.iter().rev().zip(self.recurrence.iter()) {
+            for (term, coefficient) in terms.iter().rev().zip(self.recurrence_coefficients.iter()) {
                 new_term += term * coefficient;
             }
             terms.push(new_term);
