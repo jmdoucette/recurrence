@@ -3,7 +3,6 @@ use std::collections::HashSet;
 #[allow(dead_code)]
 const TOL: f64 = 0.0001;
 
-
 // NOT equivalece relations as is not transitive
 #[allow(dead_code)]
 pub fn within(x: f64, y: f64) -> bool {
@@ -22,7 +21,7 @@ pub fn assert_within(x: f64, y: f64) {
 }
 
 #[allow(dead_code)]
-pub fn float_counts_equal(fc1: Vec<(f64, u32)>, fc2:  Vec<(f64, u32)>) -> bool {
+pub fn float_counts_equal(fc1: Vec<(f64, u32)>, fc2: Vec<(f64, u32)>) -> bool {
     let mut used = HashSet::new();
 
     for (float1, count1) in &fc1 {

@@ -83,11 +83,18 @@ mod tests {
     fn test_characteristic_polynomial() {
         let recurrence_relation1 = RecurrenceRelation::new(vec![0.0, 1.0], vec![1.0, 1.0]);
         let characteristic_polynomial1 = Polynomial::new(vec![-1.0, -1.0]);
-        assert_eq!(recurrence_relation1.characteristic_polynomial(), characteristic_polynomial1);
+        assert_eq!(
+            recurrence_relation1.characteristic_polynomial(),
+            characteristic_polynomial1
+        );
 
-        let recurrence_relation2 = RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
+        let recurrence_relation2 =
+            RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
         let characteristic_polynomial2 = Polynomial::new(vec![8.0, 12.0, 6.0]);
-        assert_eq!(recurrence_relation2.characteristic_polynomial(), characteristic_polynomial2);
+        assert_eq!(
+            recurrence_relation2.characteristic_polynomial(),
+            characteristic_polynomial2
+        );
     }
 
     #[test]
@@ -101,8 +108,11 @@ mod tests {
         let terms1 = vec![0.0, 1.0, 1.0, 2.0, 3.0, 5.0, 8.0, 13.0, 21.0, 34.0];
         assert_eq!(recurrence_relation1.get_terms(10), terms1);
 
-        let recurrence_relation2 = RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
-        let terms2 = vec![1.0, -2.0, 3.0, -2.0, -8.0, 48.0, -176.0, 544.0, -1536.0, 4096.0];
+        let recurrence_relation2 =
+            RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
+        let terms2 = vec![
+            1.0, -2.0, 3.0, -2.0, -8.0, 48.0, -176.0, 544.0, -1536.0, 4096.0,
+        ];
         assert_eq!(recurrence_relation2.get_terms(10), terms2);
     }
 }
