@@ -2,7 +2,7 @@ use crate::utilities::*;
 use nalgebra::DMatrix;
 use std::fmt;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, PartialOrd, Clone)]
 pub struct Polynomial {
     coefficients: Vec<f64>,
 }
@@ -37,7 +37,7 @@ impl Polynomial {
     }
 
     // returns a vector of the roots of a polynomial
-    pub fn roots(&self) -> Vec<(f64, u32)> {
+    pub fn roots(&self) -> Vec<(f64, usize)> {
         let companion = self.companion_matrix();
         // look into increasing number of iterations
         let schur = companion
@@ -67,7 +67,11 @@ impl Polynomial {
     }
 
     pub fn evaluate(&self, n: u32) -> f64 {
-        todo!();
+        let mut res = 0.0;
+        for (power, coefficient) in self.coefficients.iter().enumerate() {
+            res += (*coefficient) * (n as f64).powf(power as f64);
+        }
+        res
     }
 }
 
@@ -80,6 +84,7 @@ impl fmt::Display for Polynomial {
         write!(f, "{}", res)
     }
 }
+
 
 #[cfg(test)]
 mod tests {
@@ -117,10 +122,10 @@ mod tests {
             (1.618033988749894848204586834, 1),
             (-0.618033988749894848204586834, 1),
         ];
-        assert!(float_counts_equal(polynomial1.roots(), expected_roots1));
+        assert!(float_counts_within(polynomial1.roots(), expected_roots1));
 
         let polynomial2 = Polynomial::new(vec![8.0, 12.0, 6.0, 1.0]);
         let expected_roots2 = vec![(-2.0, 3)];
-        assert!(float_counts_equal(polynomial2.roots(), expected_roots2));
+        assert!(float_counts_within(polynomial2.roots(), expected_roots2));
     }
 }

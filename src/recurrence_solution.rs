@@ -1,6 +1,7 @@
 use std::fmt;
 use crate::polynomial::Polynomial;
 
+#[derive(Debug, Clone)]
 pub struct RecurrenceSolution {
     terms: Vec<(Polynomial, f64)>
 }
@@ -12,7 +13,7 @@ impl RecurrenceSolution {
         }
     }
 
-    pub fn evaluate(&self, n: u32) -> f64 {
+    fn evaluate(&self, n: u32) -> f64 {
         let mut res = 0.0;
         for (polynomial, root) in &self.terms {
             res += polynomial.evaluate(n) * root.powf(n as f64);
@@ -39,13 +40,21 @@ impl fmt::Display for RecurrenceSolution {
     }
 }
 
+
 #[cfg(test)]
 mod tests {
-    //use super::*;
-    //use crate::test_utils::*;
+    use super::*;
+    use crate::utilities::*;
 
     #[test]
     fn test_get_terms() {
-        todo!();
+        let recurrence_solution1 = RecurrenceSolution::new(vec![
+            (Polynomial::new(vec![0.4472135955]), 1.618033988749894848204586834),
+            (Polynomial::new(vec![-0.4472135955]), -0.618033988749894848204586834),
+        ]);
+        let terms1 = vec![0.0, 1.0, 1.0, 2.0, 3.0, 5.0, 8.0, 13.0, 21.0, 34.0];
+        assert!(vec_within(recurrence_solution1.get_terms(10), terms1));
+
+        // todo: add testcase with multiplicity greater than 1
     }
 }

@@ -35,6 +35,7 @@ impl RecurrenceRelation {
         for coefficient in self.recurrence_coefficients.iter().rev() {
             coefficients.push(-1.0 * (*coefficient));
         }
+        coefficients.push(1.0);
 
         Polynomial::new(coefficients)
     }
@@ -42,19 +43,44 @@ impl RecurrenceRelation {
     /// returns the polynomial which is an explicit solution to the recurrence relation
     pub fn solve(&self) -> RecurrenceSolution {
         let roots = self.characteristic_polynomial().roots();
-        todo!();
-        // change later
-        /*
-        let matrix =
-            DMatrix::from_row_slice(2, 2, &[1.0, 1.0, 1.618033988749895, -0.6180339887498949]);
-        let base_cases_vec = DMatrix::from_vec(self.degree(), 1, self.base_cases.clone());
+        let mut elements = Vec::new();
+        for n in 0..self.degree() {
+            for (root, count) in &roots {
+                for i in 0..*count {
+                    elements.push(root.powf(n as f64) * (n as f64).powf(i as f64));
+                }
+            }
+        }
+
+        let matrix = DMatrix::from_row_slice(
+            self.degree(),
+            self.degree(),
+            &elements
+        );
+        let base_cases_vec = DMatrix::from_row_slice(
+            self.degree(),
+            1,
+            &self.base_cases
+        );
+            
         let alphas_matrix = matrix
             .lu()
             .solve(&base_cases_vec)
             .expect("cant solve given linear system");
         let alphas: Vec<f64> = alphas_matrix.iter().copied().collect();
-        RecurrenceSolution::new(alphas, roots)
-        */
+
+        let mut terms = Vec::new();
+        let mut index = 0;
+        for (root, count) in &roots {
+            let mut polynomial_coefficients = Vec::new();
+            for _ in 0..*count {
+                polynomial_coefficients.push(alphas[index]);
+                index += 1;
+            }
+            let polynomial = Polynomial::new(polynomial_coefficients);
+            terms.push((polynomial, *root));
+        }
+        RecurrenceSolution::new(terms)
     }
 
     /// returns the first n terms of the recurrence relation
@@ -80,11 +106,12 @@ impl RecurrenceRelation {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::utilities::*;
 
     #[test]
     fn test_characteristic_polynomial() {
         let recurrence_relation1 = RecurrenceRelation::new(vec![0.0, 1.0], vec![1.0, 1.0]);
-        let characteristic_polynomial1 = Polynomial::new(vec![-1.0, -1.0]);
+        let characteristic_polynomial1 = Polynomial::new(vec![-1.0, -1.0, 1.0]);
         assert_eq!(
             recurrence_relation1.characteristic_polynomial(),
             characteristic_polynomial1
@@ -92,7 +119,7 @@ mod tests {
 
         let recurrence_relation2 =
             RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
-        let characteristic_polynomial2 = Polynomial::new(vec![8.0, 12.0, 6.0]);
+        let characteristic_polynomial2 = Polynomial::new(vec![8.0, 12.0, 6.0, 1.0]);
         assert_eq!(
             recurrence_relation2.characteristic_polynomial(),
             characteristic_polynomial2
@@ -101,7 +128,14 @@ mod tests {
 
     #[test]
     fn test_solve() {
-        todo!();
+        let recurrence_relation1 = RecurrenceRelation::new(vec![0.0, 1.0], vec![1.0, 1.0]);
+        assert!(vec_within(recurrence_relation1.solve().get_terms(10), recurrence_relation1.get_terms(10)));
+        
+        let recurrence_relation2 = RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
+
+        println!("{:?} {:?}", recurrence_relation2.solve().get_terms(5), recurrence_relation2.get_terms(5));
+        assert!(vec_within(recurrence_relation2.solve().get_terms(5), recurrence_relation2.get_terms(5)));
+
     }
 
     #[test]
