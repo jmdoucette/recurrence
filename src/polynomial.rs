@@ -117,10 +117,7 @@ mod tests {
     #[test]
     fn test_roots() {
         let polynomial1 = Polynomial::new(vec![-1.0, -1.0, 1.0]);
-        let expected_roots1 = vec![
-            (1.618_033_988_749_895, 1),
-            (-0.618_033_988_749_894_9, 1),
-        ];
+        let expected_roots1 = vec![(1.618_033_988_749_895, 1), (-0.618_033_988_749_894_9, 1)];
         assert!(float_counts_within(polynomial1.roots(), expected_roots1));
 
         let polynomial2 = Polynomial::new(vec![8.0, 12.0, 6.0, 1.0]);

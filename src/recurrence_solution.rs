@@ -46,10 +46,7 @@ mod tests {
     #[test]
     fn test_get_terms() {
         let recurrence_solution1 = RecurrenceSolution::new(vec![
-            (
-                Polynomial::new(vec![0.4472135955]),
-                1.618_033_988_749_895,
-            ),
+            (Polynomial::new(vec![0.4472135955]), 1.618_033_988_749_895),
             (
                 Polynomial::new(vec![-0.4472135955]),
                 -0.618_033_988_749_894_9,
