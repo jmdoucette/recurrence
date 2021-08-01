@@ -52,17 +52,9 @@ impl RecurrenceRelation {
             }
         }
 
-        let matrix = DMatrix::from_row_slice(
-            self.degree(),
-            self.degree(),
-            &elements
-        );
-        let base_cases_vec = DMatrix::from_row_slice(
-            self.degree(),
-            1,
-            &self.base_cases
-        );
-            
+        let matrix = DMatrix::from_row_slice(self.degree(), self.degree(), &elements);
+        let base_cases_vec = DMatrix::from_row_slice(self.degree(), 1, &self.base_cases);
+
         let alphas_matrix = matrix
             .lu()
             .solve(&base_cases_vec)
@@ -129,13 +121,23 @@ mod tests {
     #[test]
     fn test_solve() {
         let recurrence_relation1 = RecurrenceRelation::new(vec![0.0, 1.0], vec![1.0, 1.0]);
-        assert!(vec_within(recurrence_relation1.solve().get_terms(10), recurrence_relation1.get_terms(10)));
-        
-        let recurrence_relation2 = RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
+        assert!(vec_within(
+            recurrence_relation1.solve().get_terms(10),
+            recurrence_relation1.get_terms(10)
+        ));
 
-        println!("{:?} {:?}", recurrence_relation2.solve().get_terms(5), recurrence_relation2.get_terms(5));
-        assert!(vec_within(recurrence_relation2.solve().get_terms(5), recurrence_relation2.get_terms(5)));
+        let recurrence_relation2 =
+            RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
 
+        println!(
+            "{:?} {:?}",
+            recurrence_relation2.solve().get_terms(5),
+            recurrence_relation2.get_terms(5)
+        );
+        assert!(vec_within(
+            recurrence_relation2.solve().get_terms(5),
+            recurrence_relation2.get_terms(5)
+        ));
     }
 
     #[test]

@@ -46,11 +46,8 @@ pub fn vec_within(v1: Vec<f64>, v2: Vec<f64>) -> bool {
     }
     for (num1, num2) in v1.iter().zip(v2.iter()) {
         if !within(*num1, *num2) {
-            return false
+            return false;
         }
     }
     true
 }
-
-
-

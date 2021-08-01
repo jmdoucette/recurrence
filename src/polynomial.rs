@@ -85,7 +85,6 @@ impl fmt::Display for Polynomial {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -119,8 +118,8 @@ mod tests {
     fn test_roots() {
         let polynomial1 = Polynomial::new(vec![-1.0, -1.0, 1.0]);
         let expected_roots1 = vec![
-            (1.618033988749894848204586834, 1),
-            (-0.618033988749894848204586834, 1),
+            (1.618_033_988_749_895, 1),
+            (-0.618_033_988_749_894_9, 1),
         ];
         assert!(float_counts_within(polynomial1.roots(), expected_roots1));
 

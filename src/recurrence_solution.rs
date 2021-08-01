@@ -1,16 +1,14 @@
-use std::fmt;
 use crate::polynomial::Polynomial;
+use std::fmt;
 
 #[derive(Debug, Clone)]
 pub struct RecurrenceSolution {
-    terms: Vec<(Polynomial, f64)>
+    terms: Vec<(Polynomial, f64)>,
 }
 
 impl RecurrenceSolution {
     pub fn new(terms: Vec<(Polynomial, f64)>) -> RecurrenceSolution {
-        RecurrenceSolution {
-            terms
-        }
+        RecurrenceSolution { terms }
     }
 
     fn evaluate(&self, n: u32) -> f64 {
@@ -40,7 +38,6 @@ impl fmt::Display for RecurrenceSolution {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -49,8 +46,14 @@ mod tests {
     #[test]
     fn test_get_terms() {
         let recurrence_solution1 = RecurrenceSolution::new(vec![
-            (Polynomial::new(vec![0.4472135955]), 1.618033988749894848204586834),
-            (Polynomial::new(vec![-0.4472135955]), -0.618033988749894848204586834),
+            (
+                Polynomial::new(vec![0.4472135955]),
+                1.618_033_988_749_895,
+            ),
+            (
+                Polynomial::new(vec![-0.4472135955]),
+                -0.618_033_988_749_894_9,
+            ),
         ]);
         let terms1 = vec![0.0, 1.0, 1.0, 2.0, 3.0, 5.0, 8.0, 13.0, 21.0, 34.0];
         assert!(vec_within(recurrence_solution1.get_terms(10), terms1));
