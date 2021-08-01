@@ -40,9 +40,10 @@ jobs:
 
   tests:
     name: Run tests
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: hecrj/setup-rust-action@v1
     - name: Build
       run: cargo build --verbose
     - name: Run tests
