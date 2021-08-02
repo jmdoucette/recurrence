@@ -128,12 +128,6 @@ mod tests {
 
         let recurrence_relation2 =
             RecurrenceRelation::new(vec![1.0, -2.0, 3.0], vec![-6.0, -12.0, -8.0]);
-
-        println!(
-            "{:?} {:?}",
-            recurrence_relation2.solve().get_terms(5),
-            recurrence_relation2.get_terms(5)
-        );
         assert!(vec_within(
             recurrence_relation2.solve().get_terms(5),
             recurrence_relation2.get_terms(5)
