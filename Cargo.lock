@@ -1497,6 +1497,7 @@ checksum = "d7cff876b8f18eed75a66cf49b65e7f967cb354a7aa16003fb55dbfd25b44b4f"
 name = "web-app"
 version = "0.1.0"
 dependencies = [
+ "recurrence",
  "rocket",
 ]
 
