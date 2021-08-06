@@ -2,6 +2,7 @@ use crate::polynomial::Polynomial;
 use crate::recurrence_solution::RecurrenceSolution;
 use nalgebra::DMatrix;
 use std::cmp::min;
+use std::str::FromStr;
 
 pub struct RecurrenceRelation {
     base_cases: Vec<f64>,
@@ -94,6 +95,17 @@ impl RecurrenceRelation {
         terms
     }
 }
+
+pub struct ParseRecurrenceError {}
+
+impl FromStr for RecurrenceRelation {
+    type Err = ParseRecurrenceError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        todo!();
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
