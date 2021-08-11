@@ -3,6 +3,7 @@ use crate::recurrence_solution::RecurrenceSolution;
 use nalgebra::DMatrix;
 use std::cmp::min;
 use std::str::FromStr;
+use regex::Regex;
 
 pub struct RecurrenceRelation {
     base_cases: Vec<f64>,
@@ -96,13 +97,81 @@ impl RecurrenceRelation {
     }
 }
 
-pub struct ParseRecurrenceError {}
+#[derive(Debug)]
+pub enum ParseRecurrenceError {
+    NoRecurrence,
+    MultipleRecurrence,
+    TermMatchesNothing,
+    MultipleBaseCase,
+    NoBaseCase,
+    MissingEquals,
+    ParseFloatError,
+    ParseIntError,
+}
+
+impl From<std::num::ParseFloatError> for ParseRecurrenceError {
+    fn from(_: std::num::ParseFloatError) -> Self {
+        ParseRecurrenceError::ParseFloatError
+    }
+}
+
+impl From<std::num::ParseIntError> for ParseRecurrenceError {
+    fn from(_: std::num::ParseIntError) -> Self {
+        ParseRecurrenceError::ParseIntError
+    }
+}
+
+fn parse_base_case(s: &str) -> Result<(f64, usize), ParseRecurrenceError> {
+    let re = Regex::new(r"a_\d{1} = \d{1}.\d{1}").unwrap();
+    for cap in re.captures_iter(s) {
+        println!("Month: {} Day: {} Year: {}", &cap[1], &cap[2], &cap[0]);
+        println!("1");
+    }
+    println!("2");
+    todo!();
+}
+
+fn parse_relation(s: &str) -> Result<Vec<f64>, ParseRecurrenceError> {
+    todo!();
+}
+
 
 impl FromStr for RecurrenceRelation {
     type Err = ParseRecurrenceError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        todo!();
+        let mut recurrence = None;
+        let mut base_case_pairs = Vec::new();
+        let equations= s.split(',').map(|x| x.trim());
+        
+        for equation in equations {
+            if let Ok(parsed_base_case) = parse_base_case(equation) {
+                base_case_pairs.push(parsed_base_case);
+            } else if let Ok(parsed_recurrence) = parse_relation(equation) {
+                if recurrence.is_some() {
+                    return Err(ParseRecurrenceError::MultipleRecurrence);
+                }
+                recurrence = Some(parsed_recurrence);
+            } else {
+                return Err(ParseRecurrenceError::TermMatchesNothing);
+            }
+        }
+
+        let recurrence = recurrence.ok_or(ParseRecurrenceError::NoRecurrence)?;
+
+        // should look into what happens with trailing 0s
+        let degree = recurrence.len();
+        let mut base_cases = vec![None; degree];
+        for (num, index) in base_case_pairs {
+            // may panic here, should swap to error
+            if base_cases[index].is_some() {
+                return Err(ParseRecurrenceError::MultipleBaseCase);
+            } else {
+                base_cases[index] = Some(num);
+            }
+        }
+        let base_cases = base_cases.iter().map(|x| x.ok_or(ParseRecurrenceError::NoBaseCase)).collect::<Result<Vec<f64>, ParseRecurrenceError>>()?;
+        Ok(RecurrenceRelation::new(base_cases, recurrence))
     }
 }
 
@@ -158,5 +227,11 @@ mod tests {
             1.0, -2.0, 3.0, -2.0, -8.0, 48.0, -176.0, 544.0, -1536.0, 4096.0,
         ];
         assert_eq!(recurrence_relation2.get_terms(10), terms2);
+    }
+
+    #[test]
+    fn test_parse_base_case() {
+        println!("3");
+        parse_base_case("a_0 = 1.0").unwrap();
     }
 }

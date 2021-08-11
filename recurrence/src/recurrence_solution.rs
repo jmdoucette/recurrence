@@ -32,7 +32,7 @@ impl fmt::Display for RecurrenceSolution {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut res = String::new();
         for (polynomial, root) in &self.terms {
-            res.push_str(&format!("({}) * {}^n", polynomial, root));
+            res.push_str(&format!("({}) * {}^n + ", polynomial, root));
         }
         write!(f, "{}", res)
     }
