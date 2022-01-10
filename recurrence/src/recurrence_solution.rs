@@ -33,7 +33,7 @@ impl fmt::Display for RecurrenceSolution {
         let mut res = String::new();
 
         for (i, (polynomial, root)) in self.terms.iter().enumerate() {
-            if i == self.terms.len()-1 {
+            if i == self.terms.len() - 1 {
                 res.push_str(&format!("({}) * {:.3}^n", polynomial, root));
             } else {
                 res.push_str(&format!("({}) * {:.3}^n + ", polynomial, root));

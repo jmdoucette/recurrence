@@ -131,8 +131,8 @@ fn parse_base_case(s: &str) -> Result<(f64, usize), ParseRecurrenceError> {
     if parts.next().is_some() {
         return Err(ParseRecurrenceError::RecurrenceError);
     }
-    let lparen = left.find('(').ok_or(ParseRecurrenceError::BaseCaseError)?;
-    let rparen = left.find(')').ok_or(ParseRecurrenceError::BaseCaseError)?;
+    let lparen = left.find('{').ok_or(ParseRecurrenceError::BaseCaseError)?;
+    let rparen = left.find('}').ok_or(ParseRecurrenceError::BaseCaseError)?;
     let index: usize = left[lparen + 1..rparen].trim().parse()?;
 
     let val: f64 = right.trim().parse()?;
@@ -153,10 +153,10 @@ fn parse_recurrence(s: &str) -> Result<Vec<f64>, ParseRecurrenceError> {
     for part in parts {
         let part = part.trim();
         let lparen = part
-            .find('(')
+            .find('{')
             .ok_or(ParseRecurrenceError::RecurrenceError)?;
         let rparen = part
-            .find(')')
+            .find('}')
             .ok_or(ParseRecurrenceError::RecurrenceError)?;
         let minus = part
             .find('-')
