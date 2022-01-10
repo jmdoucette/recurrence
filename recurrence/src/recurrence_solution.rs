@@ -31,8 +31,13 @@ impl RecurrenceSolution {
 impl fmt::Display for RecurrenceSolution {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut res = String::new();
-        for (polynomial, root) in &self.terms {
-            res.push_str(&format!("({}) * {}^n + ", polynomial, root));
+
+        for (i, (polynomial, root)) in self.terms.iter().enumerate() {
+            if i == self.terms.len()-1 {
+                res.push_str(&format!("({}) * {:.3}^n", polynomial, root));
+            } else {
+                res.push_str(&format!("({}) * {:.3}^n + ", polynomial, root));
+            }
         }
         write!(f, "{}", res)
     }

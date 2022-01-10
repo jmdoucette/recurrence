@@ -279,8 +279,8 @@ mod tests {
     fn test_parse_base_case() {
         assert_eq!(parse_base_case("f(0) = 1.0").unwrap(), (1.0, 0));
         assert_eq!(parse_base_case("f(0) = 1").unwrap(), (1.0, 0));
-        assert_eq!(parse_base_case("f(2) = 3.14").unwrap(), (3.14, 2));
-        assert_eq!(parse_base_case("a(2) = 3.14").unwrap(), (3.14, 2));
+        assert_eq!(parse_base_case("f(2) = 3.24").unwrap(), (3.24, 2));
+        assert_eq!(parse_base_case("a(2) = 3.24").unwrap(), (3.24, 2));
     }
 
     #[test]
@@ -288,7 +288,7 @@ mod tests {
         assert_eq!(parse_recurrence("f(n) = 1.0f(n-1)").unwrap(), vec![1.0]);
         assert_eq!(parse_recurrence("f(n) = 1f(n-1)").unwrap(), vec![1.0]);
         assert_eq!(parse_recurrence("f(n) = f(n-1)").unwrap(), vec![1.0]);
-        assert_eq!(parse_recurrence("f(n) = 3.14f(n-1)").unwrap(), vec![3.14]);
+        assert_eq!(parse_recurrence("f(n) = 3.24f(n-1)").unwrap(), vec![3.24]);
 
         assert_eq!(
             parse_recurrence("f(n) = f(n-1) + f(n-2)").unwrap(),

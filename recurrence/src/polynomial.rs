@@ -79,7 +79,13 @@ impl fmt::Display for Polynomial {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut res = String::new();
         for (pow, coefficient) in self.coefficients.iter().enumerate().rev() {
-            res.push_str(&format!("{}n^{} ", coefficient, pow));
+            if pow == 0 {
+                res.push_str(&format!("{:.3}", coefficient));
+            } else if pow == 1 {
+                res.push_str(&format!("{:.3}n", coefficient));
+            } else {
+                res.push_str(&format!("{:.3}n^{}", coefficient, pow));
+            }
         }
         write!(f, "{}", res)
     }

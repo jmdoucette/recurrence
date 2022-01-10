@@ -3,7 +3,7 @@ use std::io::stdin;
 
 fn main() {
     loop {
-        println!("Enter recurrence relation");
+        println!("Enter recurrence relation:");
         let mut recurrence_relation_string = String::new();
         stdin()
             .read_line(&mut recurrence_relation_string)
@@ -14,6 +14,7 @@ fn main() {
                 Err(_) => continue,
             };
         let recurrence_solution = recurrence_relation.solve();
-        println!("solution is: {}", recurrence_solution);
+        println!("The solution to this recurrence relation is: {}", recurrence_solution);
+        println!("The first 10 terms of this recurrence relation are: {:?}", recurrence_relation.get_terms(10))
     }
 }
