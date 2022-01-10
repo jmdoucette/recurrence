@@ -277,32 +277,32 @@ mod tests {
 
     #[test]
     fn test_parse_base_case() {
-        assert_eq!(parse_base_case("f(0) = 1.0").unwrap(), (1.0, 0));
-        assert_eq!(parse_base_case("f(0) = 1").unwrap(), (1.0, 0));
-        assert_eq!(parse_base_case("f(2) = 3.24").unwrap(), (3.24, 2));
-        assert_eq!(parse_base_case("a(2) = 3.24").unwrap(), (3.24, 2));
+        assert_eq!(parse_base_case("f{0} = 1.0").unwrap(), (1.0, 0));
+        assert_eq!(parse_base_case("f{0} = 1").unwrap(), (1.0, 0));
+        assert_eq!(parse_base_case("f{2} = 3.24").unwrap(), (3.24, 2));
+        assert_eq!(parse_base_case("a{2} = 3.24").unwrap(), (3.24, 2));
     }
 
     #[test]
     fn test_parse_recurrence() {
-        assert_eq!(parse_recurrence("f(n) = 1.0f(n-1)").unwrap(), vec![1.0]);
-        assert_eq!(parse_recurrence("f(n) = 1f(n-1)").unwrap(), vec![1.0]);
-        assert_eq!(parse_recurrence("f(n) = f(n-1)").unwrap(), vec![1.0]);
-        assert_eq!(parse_recurrence("f(n) = 3.24f(n-1)").unwrap(), vec![3.24]);
+        assert_eq!(parse_recurrence("f{n} = 1.0f{n-1}").unwrap(), vec![1.0]);
+        assert_eq!(parse_recurrence("f{n} = 1f{n-1}").unwrap(), vec![1.0]);
+        assert_eq!(parse_recurrence("f{n} = f{n-1}").unwrap(), vec![1.0]);
+        assert_eq!(parse_recurrence("f{n} = 3.24f{n-1}").unwrap(), vec![3.24]);
 
         assert_eq!(
-            parse_recurrence("f(n) = f(n-1) + f(n-2)").unwrap(),
+            parse_recurrence("f{n} = f{n-1} + f{n-2}").unwrap(),
             vec![1.0, 1.0]
         );
         assert_eq!(
-            parse_recurrence("f(n) = 3f(n-1) + 5f(n-3)").unwrap(),
+            parse_recurrence("f{n} = 3f{n-1} + 5f{n-3}").unwrap(),
             vec![3.0, 0.0, 5.0]
         );
     }
 
     #[test]
     fn test_parse_recurrence_relation() {
-        let relation: RecurrenceRelation = "f(n) = f(n-1) + f(n-2), f(0) = 0, f(1) = 1"
+        let relation: RecurrenceRelation = "f{n} = f{n-1} + f{n-2}, f{0} = 0, f{1} = 1"
             .parse()
             .unwrap();
         assert_eq!(
