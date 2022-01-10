@@ -13,7 +13,7 @@ fn main() {
         match args.recurrence_relation_string.trim().parse() {
             Ok(recurrence_relation) => recurrence_relation,
             Err(_) => {
-                println!("invalid recurrence relation");
+                eprintln!("invalid recurrence relation");
                 return;
             }
         };
