@@ -1,10 +1,10 @@
 use crate::polynomial::Polynomial;
 use crate::recurrence_solution::RecurrenceSolution;
 use nalgebra::DMatrix;
-use std::cmp::min;
+use std::cmp::{min, max};
 use std::str::FromStr;
-use regex::Regex;
 
+#[derive(PartialEq, Debug)]
 pub struct RecurrenceRelation {
     base_cases: Vec<f64>,
     recurrence_coefficients: Vec<f64>,
@@ -12,7 +12,7 @@ pub struct RecurrenceRelation {
 
 impl RecurrenceRelation {
     /// creates a new recurrence relation with the specified recurrence and base cases
-    /// for example the recurrence f_n = 3f_{n-1} + 5f_{n-2} and base cases f_0 = 0 and f_1 = 1
+    /// for example the recurrence f(n) = 3f(n-1) + 5f(n-2) and base cases f(0) = 0 and f(1) = 1
     /// base_cases = vec![0, 1]
     /// recurrence = vec![3, 5]
     pub fn new(base_cases: Vec<f64>, recurrence_coefficients: Vec<f64>) -> RecurrenceRelation {
@@ -107,6 +107,9 @@ pub enum ParseRecurrenceError {
     MissingEquals,
     ParseFloatError,
     ParseIntError,
+    BaseCaseError,
+    RecurrenceError,
+
 }
 
 impl From<std::num::ParseFloatError> for ParseRecurrenceError {
@@ -122,17 +125,57 @@ impl From<std::num::ParseIntError> for ParseRecurrenceError {
 }
 
 fn parse_base_case(s: &str) -> Result<(f64, usize), ParseRecurrenceError> {
-    let re = Regex::new(r"a_\d{1} = \d{1}.\d{1}").unwrap();
-    for cap in re.captures_iter(s) {
-        println!("Month: {} Day: {} Year: {}", &cap[1], &cap[2], &cap[0]);
-        println!("1");
+    let mut parts = s.split('=');
+    //todo: turn panic to error
+    let left = parts.next().ok_or(ParseRecurrenceError::BaseCaseError)?;
+    let right = parts.next().ok_or(ParseRecurrenceError::BaseCaseError)?;
+    if parts.next().is_some() {
+        return Err(ParseRecurrenceError::RecurrenceError);
     }
-    println!("2");
-    todo!();
+    let lparen = left.find('(').ok_or(ParseRecurrenceError::BaseCaseError)?;
+    let rparen = left.find(')').ok_or(ParseRecurrenceError::BaseCaseError)?;
+    let index: usize = left[lparen+1..rparen].trim().parse()?;
+
+    let val: f64 = right.trim().parse()?;
+    return Ok((val, index));
 }
 
-fn parse_relation(s: &str) -> Result<Vec<f64>, ParseRecurrenceError> {
-    todo!();
+
+fn parse_recurrence(s: &str) -> Result<Vec<f64>, ParseRecurrenceError> {
+    let mut parts = s.split('=');
+    let _left = parts.next().ok_or(ParseRecurrenceError::RecurrenceError)?;
+    let right = parts.next().ok_or(ParseRecurrenceError::RecurrenceError)?;
+    if parts.next().is_some() {
+        return Err(ParseRecurrenceError::RecurrenceError);
+    }
+
+    let parts = right.split('+');
+    let mut degree = 0;
+    let mut pairs: Vec<(f64, usize)> = Vec::new();
+    for part in parts {
+        let part = part.trim();
+        let lparen = part.find('(').ok_or(ParseRecurrenceError::RecurrenceError)?;
+        let rparen = part.find(')').ok_or(ParseRecurrenceError::RecurrenceError)?;
+        let minus = part.find('-').ok_or(ParseRecurrenceError::RecurrenceError)?;
+
+        
+        let index: usize = part[minus+1..rparen].trim().parse()?;
+        degree = max(degree, index);
+        let coefficient;
+        if lparen == 1 {
+            coefficient = 1.0;
+        } else {
+            coefficient = part[..lparen-1].trim().parse()?;
+        }
+        pairs.push((coefficient, index));
+    }
+
+    let mut res = vec![0.0; degree];
+    for (coefficient, index) in pairs {
+        res[index-1] = coefficient;
+    }
+    Ok(res)
+
 }
 
 
@@ -142,12 +185,12 @@ impl FromStr for RecurrenceRelation {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut recurrence = None;
         let mut base_case_pairs = Vec::new();
-        let equations= s.split(',').map(|x| x.trim());
+        let equations = s.split(',').map(|x| x.trim());
         
         for equation in equations {
             if let Ok(parsed_base_case) = parse_base_case(equation) {
                 base_case_pairs.push(parsed_base_case);
-            } else if let Ok(parsed_recurrence) = parse_relation(equation) {
+            } else if let Ok(parsed_recurrence) = parse_recurrence(equation) {
                 if recurrence.is_some() {
                     return Err(ParseRecurrenceError::MultipleRecurrence);
                 }
@@ -231,7 +274,26 @@ mod tests {
 
     #[test]
     fn test_parse_base_case() {
-        println!("3");
-        parse_base_case("a_0 = 1.0").unwrap();
+        assert_eq!(parse_base_case("f(0) = 1.0").unwrap(), (1.0, 0));
+        assert_eq!(parse_base_case("f(0) = 1").unwrap(), (1.0, 0));
+        assert_eq!(parse_base_case("f(2) = 3.14").unwrap(), (3.14, 2));
+        assert_eq!(parse_base_case("a(2) = 3.14").unwrap(), (3.14, 2));
+    }
+
+    #[test]
+    fn test_parse_recurrence() {
+        assert_eq!(parse_recurrence("f(n) = 1.0f(n-1)").unwrap(), vec![1.0]);
+        assert_eq!(parse_recurrence("f(n) = 1f(n-1)").unwrap(), vec![1.0]);
+        assert_eq!(parse_recurrence("f(n) = f(n-1)").unwrap(), vec![1.0]);
+        assert_eq!(parse_recurrence("f(n) = 3.14f(n-1)").unwrap(), vec![3.14]);
+
+        assert_eq!(parse_recurrence("f(n) = f(n-1) + f(n-2)").unwrap(), vec![1.0, 1.0]);
+        assert_eq!(parse_recurrence("f(n) = 3f(n-1) + 5f(n-3)").unwrap(), vec![3.0, 0.0, 5.0]);
+    }
+    
+    #[test]
+    fn test_parse_recurrence_relation() {
+        let relation: RecurrenceRelation = "f(n) = f(n-1) + f(n-2), f(0) = 0, f(1) = 1".parse().unwrap();
+        assert_eq!(relation, RecurrenceRelation::new(vec![0.0, 1.0], vec![1.0, 1.0]));
     }
 }
