@@ -1,5 +1,6 @@
 mod polynomial;
 mod recurrence_relation;
+mod recurrence_relation_parser;
 mod recurrence_solution;
 mod utilities;
 
