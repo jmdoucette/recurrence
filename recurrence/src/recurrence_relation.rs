@@ -1,10 +1,9 @@
 use crate::polynomial::Polynomial;
-use crate::recurrence_solution::RecurrenceSolution;
 use crate::recurrence_relation_parser::{parse_recurrence_relation, ParseRecurrenceError};
+use crate::recurrence_solution::RecurrenceSolution;
 use nalgebra::DMatrix;
-use std::str::FromStr;
 use std::cmp::min;
-
+use std::str::FromStr;
 
 #[derive(PartialEq, Debug)]
 pub struct RecurrenceRelation {
@@ -98,7 +97,6 @@ impl RecurrenceRelation {
         terms
     }
 }
-
 
 impl FromStr for RecurrenceRelation {
     type Err = ParseRecurrenceError;

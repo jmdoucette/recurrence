@@ -67,9 +67,9 @@ fn parse_recurrence(s: &str) -> Result<Vec<f64>, ParseRecurrenceError> {
             .find('-')
             .ok_or(ParseRecurrenceError::RecurrenceError)?;
 
-        let index: usize = part[minus_index+1..rparen_index].trim().parse()?;
+        let index: usize = part[minus_index + 1..rparen_index].trim().parse()?;
         degree = max(degree, index);
-        match (lparen_index, part[..lparen_index-1].trim().parse()) {
+        match (lparen_index, part[..lparen_index - 1].trim().parse()) {
             (1, _) => pairs.push((1.0, index)),
             (_, Ok(coefficient)) => pairs.push((coefficient, index)),
             _ => {
@@ -125,11 +125,10 @@ pub fn parse_recurrence_relation(s: &str) -> Result<RecurrenceRelation, ParseRec
     Ok(RecurrenceRelation::new(base_cases, recurrence))
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_parse_base_case() {
         assert_eq!(parse_base_case("f(0) = 1.0").unwrap(), (1.0, 0));
@@ -147,7 +146,10 @@ mod tests {
         assert_eq!(parse_recurrence("f(n) = 3.24f(n-1)").unwrap(), vec![3.24]);
         assert_eq!(parse_recurrence("f(n) = 1.0*f(n-1)").unwrap(), vec![1.0]);
         assert_eq!(parse_recurrence("f(n) = 1  *f(n-1)").unwrap(), vec![1.0]);
-        assert_eq!(parse_recurrence("f(n) = 3.24  *        f(n-1)").unwrap(), vec![3.24]);
+        assert_eq!(
+            parse_recurrence("f(n) = 3.24  *        f(n-1)").unwrap(),
+            vec![3.24]
+        );
         assert_eq!(
             parse_recurrence("f(n) = f(n-1) + f(n-2)").unwrap(),
             vec![1.0, 1.0]
@@ -167,11 +169,13 @@ mod tests {
             relation,
             RecurrenceRelation::new(vec![0.0, 1.0], vec![1.0, 1.0])
         );
-        let relation: RecurrenceRelation = "a(n) = 5a(n-4) + 6.7*a(n-3), a(3)=5.0, a(1)=4   ,   a(0)=1.00,a(2)=3".parse().unwrap();
+        let relation: RecurrenceRelation =
+            "a(n) = 5a(n-4) + 6.7*a(n-3), a(3)=5.0, a(1)=4   ,   a(0)=1.00,a(2)=3"
+                .parse()
+                .unwrap();
         assert_eq!(
             relation,
             RecurrenceRelation::new(vec![1.0, 4.0, 3.0, 5.0], vec![0.0, 0.0, 6.7, 5.0])
         );
     }
-        
 }
